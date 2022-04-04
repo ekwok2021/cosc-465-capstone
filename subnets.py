@@ -2,7 +2,6 @@ class subnets():
     def addressRanges():
         return
 
-    
     def subnetMembership():
         return
 
