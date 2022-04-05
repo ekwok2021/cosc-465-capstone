@@ -9,8 +9,7 @@ class subnets:
 
         dividend = mask // 8  
         remainder = mask % 8
-        #print(dividend)
-        #print(remainder)
+        
 
         answer1 = subnet[0:dividend]
         #print(answer1)
@@ -34,21 +33,27 @@ class subnets:
         while(len(answer1) < 4):
             answer1.append(0)
 
-        answer2 = 
+        #print(answer1)
+        
+        answer2 = answer1[0:dividend]
+        #print(answer2)
+        answer2bin = '{0:0{1}b}'.format(int1, 8)
+        #print(answer2bin)
+
+        bin3 = bin1[0:remainder]
+        #print(bin3)
+        bin3 = bin3 + ('1' * (8-remainder))
+        #print(bin3)
+
+        int3 = int(bin3, 2)
+        #print(int3)
+        answer2.append(int3)
+        while(len(answer2) < 4):
+            answer2.append(255)
 
         print(answer1)
+        print(answer2)
         
-        
-
-
-
-        
-
-
-
-
-        #answer1 = 
-        #print(answer1)
         
         return
 
