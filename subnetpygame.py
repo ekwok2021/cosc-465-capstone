@@ -1,5 +1,10 @@
+from turtle import ScrolledCanvas
 import pygame
-import subnets
+from subnets import subnets
+
+
+# ideas: Time -- scores
+#        Complexity -- scores
 
 pygame.init()
 
@@ -31,16 +36,16 @@ def button(screen, position, text):
     pygame.draw.rect(screen, (100, 100, 100), (x, y, w , h))
     return screen.blit(text_render, (x, y))
 
-def redrawGameWindow(score, LIVES, color, input_rect, user_text):
+def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, user_text_2, str_sub, timer_text):
 
     win.blit(back,(0,0))
 
     base_font = pygame.font.Font(None, 32)
     font = pygame.font.SysFont("comicsans", 30, True)
     tip_font = pygame.font.SysFont("Ariel", 22, False)
+
     # update question
-    q_text = "Type in a subnet of 192.1.5.0/24"
-    # q_text = "Give a subnet of " + subnets.generate()
+    q_text = "Give a subnet of " + str_sub
     q_font = pygame.font.SysFont("comicsans", 30, True)
     question = q_font.render(q_text, 1 ,(0,0,0))
     win.blit(question, (150,150))
@@ -56,21 +61,36 @@ def redrawGameWindow(score, LIVES, color, input_rect, user_text):
     score_text = font.render("LIVES: " + str(LIVES), 1, (255,0,0))
     win.blit(score_text, (50,10))
 
-    # user input area undate
+    # user input area 1 update
 
-    in_text = font.render("Your answer: ", 1, (0,0,255))
-    win.blit(in_text, (INPUT_HOR - 200, INPUT_VER - 10))
+    in_text_1 = font.render("Start range: ", 1, (0,0,255))
+    win.blit(in_text_1, (INPUT_HOR - 200, INPUT_VER - 10))
 
-    pygame.draw.rect(win, color, input_rect)
+    pygame.draw.rect(win, color_1, input_rect_1)
   
-    text_surface = base_font.render(user_text, True, (255, 255, 255))
+    text_surface_1 = base_font.render(user_text_1, True, (255, 255, 255))
+
+    # user input area 2 update
+    in_text_2 = font.render("End range: ", 1, (0,0,255))
+    win.blit(in_text_2, (INPUT_HOR - 200, INPUT_VER + 90))
+
+    pygame.draw.rect(win, color_2, input_rect_2)
+  
+    text_surface_2 = base_font.render(user_text_2, True, (255, 255, 255))
+
       
     # render at position stated in arguments
-    win.blit(text_surface, (input_rect.x+5, input_rect.y+5))
+    win.blit(text_surface_1, (input_rect_1.x+5, input_rect_1.y+5))
+    win.blit(text_surface_2, (input_rect_2.x+5, input_rect_2.y+5))
       
     # set width of textfield
-    input_rect.w = max(100, text_surface.get_width()+10)
+    input_rect_1.w = max(100, text_surface_1.get_width()+10)
+    input_rect_2.w = max(100, text_surface_2.get_width()+10)
       
+    
+    # timer
+    win.blit(font.render(timer_text, True, (0,0,0)),(32,48))
+
     # update the screen
     pygame.display.flip()
 
@@ -99,7 +119,12 @@ def resultGameWindow(correct):
         clock.tick(60)
         pygame.display.update()
 
-
+def generateSubnet():
+    sub = subnets.genSubnet()
+    last = str(sub[-1])
+    sub = sub[:-1]
+    str_sub = ".".join(map(str,sub)) + "/" + last
+    return str_sub
 
 
 def GAME():
@@ -127,47 +152,74 @@ def GAME():
         pygame.display.update()
 
 
-    # user font
-    user_text = ""
-
-    #user input area
-    input_rect = pygame.Rect(INPUT_HOR,INPUT_VER,140,32)
-
-    # color when input box is clicked
+     # color when input box is clicked
     color_active = pygame.Color("blue")
 
     # color when input box is idle
     color_passive = pygame.Color('paleturquoise1')
-    color = color_passive
-    active = False
 
+    user_text_1 = ""
+    user_text_2 = ""
+    #user input area
+    input_rect_1 = pygame.Rect(INPUT_HOR,INPUT_VER,140,32)
+    input_rect_2 = pygame.Rect(INPUT_HOR - 30,INPUT_VER + 100 ,140,32)
 
-
-
+    color_1 = color_passive
+    color_2 = color_passive
+    active_1 = False
+    active_2 = False
     score = 0
     LIVES = 3
+    sub = generateSubnet()
+    counter = 10
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+    timer_text = str(counter).rjust(3)
+
+    # --------------------------------------------------------
+
     while level == GAME:
 
-        pygame.time.delay(100)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            if event.type == pygame.USEREVENT:
+                counter -= 1
+                timer_text = str(counter).rjust(3)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if input_rect.collidepoint(event.pos):
-                    active = True
+                if input_rect_1.collidepoint(event.pos):
+                    active_1 = True
+                    active_2 = False
                 else:
-                    active = False
+                    active_1 = False
+
+                if input_rect_2.collidepoint(event.pos):
+                    active_2 = True
+                    active_1 = False
+                else:
+                    active_2 = False
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    user_text = user_text[:-1]
-                elif event.key == pygame.K_RETURN:
+                if active_1:
+                    if event.key == pygame.K_BACKSPACE:
+                        user_text_1 = user_text_1[:-1]
+                    else: 
+                        user_text_1 += event.unicode
+                elif active_2:
+                    if event.key == pygame.K_BACKSPACE:
+                        user_text_2 = user_text_2[:-1]
+                    else:
+                        user_text_2 += event.unicode
+
+                if event.key == pygame.K_RETURN:
                     # compare the answer
                     correct = False
+                    correct = subnets.compare(user_text_1, user_text_2, sub)
 
                     # change scores and clear answer
-                    user_text = ""
+                    user_text_1 = ""
+                    user_text_2 = ""
                     if correct:
                         score += 1
                         LIVES -= 1
@@ -176,20 +228,22 @@ def GAME():
                     
                     # display result window
                     resultGameWindow(correct)
+                    sub = generateSubnet()
 
-                else:
-                    user_text += event.unicode
+            if active_1:
+                color_1 = color_active
+            else: color_1 = color_passive
 
-            if active:
-                color = color_active
-                        
-
-            else: color = color_passive
+            if active_2:
+                color_2 = color_active
+            else: color_2 = color_passive
 
             if LIVES == 0:
                 level = END
 
-        redrawGameWindow(score, LIVES, color, input_rect, user_text)
+        # win.blit(timer_font.render(timer_text, True, (0,0,0)), (32,48))
+        # pygame.display.flip()
+        redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, user_text_2, sub, timer_text)
 
     while level == END:
         clock.tick(60)
