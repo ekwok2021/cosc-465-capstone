@@ -15,55 +15,46 @@ class subnets:
         
 
         answer1 = subnet[0:dividend]
-        #print(answer1)
 
         int1 = subnet[dividend]
-        #print(int1)
 
         bin1 = '{0:0{1}b}'.format(int1, 8)
-        #print(bin1)
-        #print(len(bin1))
-
         bin2 = bin1[0:remainder]
-        #print(bin2)
         bin2 = bin2 + ('0' * (8-remainder))
-        #print(bin2)
 
         int2 = int(bin2, 2)
-        #print(int2)
 
         answer1.append(int2)
         while(len(answer1) < 4):
             answer1.append(0)
-
-        #print(answer1)
         
         answer2 = answer1[0:dividend]
-        #print(answer2)
         answer2bin = '{0:0{1}b}'.format(int1, 8)
-        #print(answer2bin)
 
         bin3 = bin1[0:remainder]
-        #print(bin3)
         bin3 = bin3 + ('1' * (8-remainder))
-        #print(bin3)
 
         int3 = int(bin3, 2)
-        #print(int3)
         answer2.append(int3)
         while(len(answer2) < 4):
             answer2.append(255)
 
-        print(answer1)
-        print(answer2)
-
         answer = [answer1, answer2]
         return answer
 
-    def compare(useranswer, correctanswer):
-        if ".".join(useranswer) == ".".join(correctanswer):
-            return true
-        return false
+    def compare(input_start, input_end, subnet):
+        correct_range = subnets.addressRanges(subnet)
+        start = correct_range[0]
+        end = correct_range[1]
+        start_mask = str(start[-1])
+        end_mask = str(end[-1])
+        start = start[:-1]
+        end = end[:-1]
+        start_str = ".".join(map(str, start)) + "/" + start_mask
+        end_str = ".".join(map(str, end)) + "/" + end_mask
+        if start_str == input_start and end_str == input_end:
+            return True
+        return False
 
     def subnetMembership(IPaddress, addressRanges):
         
