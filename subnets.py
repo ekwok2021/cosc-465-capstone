@@ -65,7 +65,9 @@ class subnets:
             return true
         return false
 
-    def subnetMembership():
+    def subnetMembership(IPaddress, addressRanges):
+        
+
         return
 
 def main():
