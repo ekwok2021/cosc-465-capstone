@@ -61,7 +61,7 @@ class subnets:
         return answer
 
     def compare(useranswer, correctanswer):
-        if useranswer == correctanswer:
+        if ".".join(useranswer) == ".".join(correctanswer):
             return true
         return false
 
