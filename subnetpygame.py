@@ -20,6 +20,7 @@ INPUT_VER = 250
 MENU = 0
 GAME = 1
 END = 2
+MAXTIME = 60
 
 
 back = pygame.image.load("sub11.jpg")
@@ -45,16 +46,19 @@ def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2,
     tip_font = pygame.font.SysFont("Ariel", 22, False)
 
     # update question
-    q_text = "Give a subnet of " + str_sub
+    q_text = "Give the range of subnet " + str_sub
     q_font = pygame.font.SysFont("comicsans", 30, True)
     question = q_font.render(q_text, 1 ,(0,0,0))
-    win.blit(question, (150,150))
+    win.blit(question, (WIDTH/2 - 350, HEIGHT / 2 -50))
 
     tip_text = tip_font.render("Press 'Enter' to submit", 1, (0,0,0))
-    win.blit(tip_text, (WIDTH / 2 - 50, HEIGHT - 75))
+    win.blit(tip_text, (WIDTH / 2 - 50, HEIGHT - 30))
+
+    # put the timer 
+    time = font.render("Time Left:", 1, (0,0,0))
+    win.blit(time, (WIDTH / 2 - 100, 10))
 
     # update score and life
-    
     lives_text = font.render("Score: " + str(score), 1, (0,0,0))
     win.blit(lives_text, (WIDTH - 150,10))
 
@@ -62,7 +66,6 @@ def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2,
     win.blit(score_text, (50,10))
 
     # user input area 1 update
-
     in_text_1 = font.render("Start range: ", 1, (0,0,255))
     win.blit(in_text_1, (INPUT_HOR - 200, INPUT_VER - 10))
 
@@ -72,7 +75,7 @@ def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2,
 
     # user input area 2 update
     in_text_2 = font.render("End range: ", 1, (0,0,255))
-    win.blit(in_text_2, (INPUT_HOR - 200, INPUT_VER + 90))
+    win.blit(in_text_2, (INPUT_HOR - 200, INPUT_VER + 40))
 
     pygame.draw.rect(win, color_2, input_rect_2)
   
@@ -89,7 +92,7 @@ def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2,
       
     
     # timer
-    win.blit(font.render(timer_text, True, (0,0,0)),(32,48))
+    win.blit(font.render(timer_text, True, (0,0,0)),(WIDTH/2 + 50, 10))
 
     # update the screen
     pygame.display.flip()
@@ -115,7 +118,7 @@ def resultGameWindow(correct):
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
-                return
+                return 10
         clock.tick(60)
         pygame.display.update()
 
@@ -162,7 +165,7 @@ def GAME():
     user_text_2 = ""
     #user input area
     input_rect_1 = pygame.Rect(INPUT_HOR,INPUT_VER,140,32)
-    input_rect_2 = pygame.Rect(INPUT_HOR - 30,INPUT_VER + 100 ,140,32)
+    input_rect_2 = pygame.Rect(INPUT_HOR - 30,INPUT_VER + 50 ,140,32)
 
     color_1 = color_passive
     color_2 = color_passive
@@ -171,15 +174,14 @@ def GAME():
     score = 0
     LIVES = 3
     sub = generateSubnet()
-    counter = 10
+    counter = MAXTIME
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     timer_text = str(counter).rjust(3)
 
     # --------------------------------------------------------
 
     while level == GAME:
-
-
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -228,6 +230,8 @@ def GAME():
                     
                     # display result window
                     resultGameWindow(correct)
+                    counter = MAXTIME
+                    timer_text = str(counter).rjust(3)
                     sub = generateSubnet()
 
             if active_1:
