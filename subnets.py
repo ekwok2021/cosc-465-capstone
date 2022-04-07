@@ -1,10 +1,13 @@
 import random
 class subnets:
-    def addressRanges():
+
+    def genSubnet(): #returns array 
         subnet = random.sample(range(0,255), 4)
         subnet.append(random.randint(1,32))
         print(subnet)
+        return subnet
 
+    def addressRanges(subnet): #returns an array of 2 arrays with the range
         mask = subnet[4]
 
         dividend = mask // 8  
@@ -53,16 +56,21 @@ class subnets:
 
         print(answer1)
         print(answer2)
-        
-        
-        return
+
+        answer = [answer1, answer2]
+        return answer
+
+    def compare(useranswer, correctanswer):
+        if useranswer == correctanswer:
+            return true
+        return false
 
     def subnetMembership():
         return
 
 def main():
-    print("DEBUG")
-    subnets.addressRanges()
+    #print("DEBUG")
+    print(subnets.addressRanges(subnets.genSubnet()))
     return
     
 if __name__ == "__main__":
