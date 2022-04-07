@@ -42,7 +42,15 @@ class subnets:
         answer = [answer1, answer2]
         return answer
 
-    def compare(input_start, input_end, subnet):
+    def compare(input_start, input_end, subnet_str):
+        l = subnet_str.split(".")
+        last_two = l[-1].split("/")
+        l = l[:-1]
+        subnet = []
+        for s in l:
+            subnet.append(int(s))
+        subnet.append(int(last_two[0]))
+        subnet.append(int(last_two[1]))
         correct_range = subnets.addressRanges(subnet)
         start = correct_range[0]
         end = correct_range[1]
