@@ -1,4 +1,4 @@
-from turtle import ScrolledCanvas
+
 import pygame
 from subnets import subnets
 
@@ -20,9 +20,13 @@ INPUT_VER = 250
 MENU = 0
 GAME = 1
 END = 2
-MAXTIME = 60
+MAXTIME = 100
 
-
+base_font = pygame.font.Font(None, 32)
+font = pygame.font.SysFont("comicsans", 30, True)
+subnet_font = pygame.font.SysFont("comicsans", 25, True)
+tip_font = pygame.font.SysFont("Ariel", 22, False)
+result_font = pygame.font.SysFont("comicsans", 50, True)
 back = pygame.image.load("sub11.jpg")
 
 def button(screen, position, text):
@@ -37,18 +41,15 @@ def button(screen, position, text):
     pygame.draw.rect(screen, (100, 100, 100), (x, y, w , h))
     return screen.blit(text_render, (x, y))
 
-def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, user_text_2, str_sub, timer_text):
+def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, user_text_2, sub, timer_text):
 
     win.blit(back,(0,0))
 
-    base_font = pygame.font.Font(None, 32)
-    font = pygame.font.SysFont("comicsans", 30, True)
     tip_font = pygame.font.SysFont("Ariel", 22, False)
 
     # update question
-    q_text = "Give the range of subnet " + str_sub
-    q_font = pygame.font.SysFont("comicsans", 30, True)
-    question = q_font.render(q_text, 1 ,(0,0,0))
+    q_text = "Give the range of subnet " + sub[1]
+    question = font.render(q_text, 1 ,(0,0,0))
     win.blit(question, (WIDTH/2 - 350, HEIGHT / 2 -50))
 
     tip_text = tip_font.render("Press 'Enter' to submit", 1, (0,0,0))
@@ -99,18 +100,26 @@ def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2,
 
     clock.tick(60)
 
-def resultGameWindow(correct):
+def resultGameWindow(timeout, correct, range1, range2):
+    # change ranges from array to string
+
+    str_r1 = ".".join(map(str,range1))
+
+    str_r2 = ".".join(map(str,range2))
+
     while True:
         win.blit(back,(0,0))
-        tip_font = pygame.font.SysFont("Ariel", 22, False)
-        result_font = pygame.font.SysFont("comicsans", 50, True)
+
         if correct:
             result_text = result_font.render("Your Answer is CORRECT", 1, (0,0,0))
             win.blit(result_text, (100, HEIGHT / 2 - 100))
         else: 
-            result_text = result_font.render("Your Answer is INCORRECT", 1, (0,0,0))
+            if timeout:
+                result_text = result_font.render("TIMEOUT!!", 1, (255,0,0))
+            else:
+                result_text = result_font.render("Your Answer is INCORRECT", 1, (0,0,0))
             win.blit(result_text, (50, HEIGHT / 2 - 100))
-            answer_text = result_font.render("The correct range is " + "1-10", 1, (0,0,0))
+            answer_text = subnet_font.render("The correct range is " + str_r1 + " - " + str_r2, 1, (0,0,0))
             win.blit(answer_text, (50, HEIGHT / 2))
         tip_text = tip_font.render("Press Any key to continue", 1, (0,0,0))
         win.blit(tip_text, (WIDTH / 2 - 75, HEIGHT - 75))
@@ -122,12 +131,13 @@ def resultGameWindow(correct):
         clock.tick(60)
         pygame.display.update()
 
+# returns an array of 1) subnets in array form 2) subnets in string form
 def generateSubnet():
     sub = subnets.genSubnet()
     last = str(sub[-1])
-    sub = sub[:-1]
-    str_sub = ".".join(map(str,sub)) + "/" + last
-    return str_sub
+    s1 = sub[:-1]
+    str_sub = ".".join(map(str,s1)) + "/" + last
+    return [sub,str_sub]
 
 
 def GAME():
@@ -181,7 +191,19 @@ def GAME():
     # --------------------------------------------------------
 
     while level == GAME:
-        
+        # initiate the correct answer and timeout
+        timeout = False
+        correct = False
+        range1, range2 = subnets.addressRanges(sub[0])
+
+        if counter <= 0:
+            timeout = True
+            resultGameWindow(timeout, correct, range1, range2)
+            counter = MAXTIME
+            timer_text = str(counter).rjust(3)
+            sub = generateSubnet()
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -215,21 +237,28 @@ def GAME():
                         user_text_2 += event.unicode
 
                 if event.key == pygame.K_RETURN:
+                    range1, range2 = subnets.addressRanges(sub[0])
+                    if timeout:
+                        LIVES -= 1
+                        resultGameWindow(timeout, correct, range1, range2)
+
                     # compare the answer
-                    correct = False
-                    correct = subnets.compare(user_text_1, user_text_2, sub)
+
+                    correct = subnets.compare(user_text_1, user_text_2, sub[1])
 
                     # change scores and clear answer
                     user_text_1 = ""
                     user_text_2 = ""
-                    if correct:
-                        score += 1
-                        LIVES -= 1
+                    if correct and not timeout:
+                        if counter >= 30:
+                            score += 2
+                        else:    
+                            score += 1
                     else:
                         LIVES -= 1
                     
                     # display result window
-                    resultGameWindow(correct)
+                    resultGameWindow(timeout, correct, range1, range2)
                     counter = MAXTIME
                     timer_text = str(counter).rjust(3)
                     sub = generateSubnet()

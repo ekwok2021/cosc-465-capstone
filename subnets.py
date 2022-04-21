@@ -58,9 +58,13 @@ class subnets:
         end_mask = str(end[-1])
         start = start[:-1]
         end = end[:-1]
-        start_str = ".".join(map(str, start)) + "/" + start_mask
-        end_str = ".".join(map(str, end)) + "/" + end_mask
-        if start_str == input_start and end_str == input_end:
+        start_str = ".".join(map(str, start)) + "." + start_mask
+        end_str = ".".join(map(str, end)) + "." + end_mask
+        print("user_t1 " + input_start)
+        print("user_t2 " + input_end)
+        print("start " + start_str)
+        print("end " + end_str)
+        if (start_str == input_start) and (end_str == input_end):
             return True
         return False
 
