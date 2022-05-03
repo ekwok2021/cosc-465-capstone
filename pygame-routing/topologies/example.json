@@ -1,0 +1,70 @@
+{
+    "ases" : [
+        {
+            "number": 1289,
+            "prefix": "149.43.0.0/16"
+        },
+        {
+            "number": 174,
+            "prefix": "154.48.0.0/12"
+        },
+        {
+            "number": 3754,
+            "prefix": "199.109.9.0/24"
+        },
+        {
+            "number": 11537,
+            "prefix": "163.253.2.0/24"
+        },
+        {
+            "number": 293,
+            "prefix": "198.104.0.0/14"
+        },
+        {
+            "number": 3128,
+            "prefix": "138.49.0.0/16"
+        },
+        {
+            "number": 59,
+            "prefix": "144.92.0.0/16"
+        }
+    ],
+    "relationships" : [
+        {
+            "customer": 1289,
+            "provider": 174
+        },
+        {
+            "customer": 1289,
+            "provider": 3754
+        },
+        {
+            "customer": 3754,
+            "provider": 11537
+        },
+        {
+            "customer": 293,
+            "provider": 11537
+        },
+        {
+            "customer": 3128,
+            "provider": 11537
+        },
+        {
+            "customer": 59,
+            "provider": 3128
+        },
+        {
+            "peerA": 11537,
+            "peerB": 59
+        },
+        {
+            "peerA": 59,
+            "peerB": 293
+        },
+        {
+            "peerA": 3754,
+            "peerB": 293
+        }
+    ]
+}

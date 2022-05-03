@@ -1,0 +1,58 @@
+{
+    "ases" : [
+        {
+            "number": 1,
+            "prefix": "11.0.0.0/8"
+        },
+        {
+            "number": 2,
+            "prefix": "12.0.0.0/8"
+        },
+        {
+            "number": 3,
+            "prefix": "13.0.0.0/8"
+        },
+        {
+            "number": 4,
+            "prefix": "14.0.0.0/8"
+        },
+        {
+            "number": 5,
+            "prefix": "15.0.0.0/8"
+        },
+        {
+            "number": 6,
+            "prefix": "16.0.0.0/8"
+        }
+    ],
+    "relationships" : [
+        {
+            "customer": 1,
+            "provider": 2
+        },
+        {
+            "customer": 4,
+            "provider": 2
+        },
+        {
+            "customer": 5,
+            "provider": 3
+        },
+        {
+            "customer": 5,
+            "provider": 4
+        },
+        {
+            "customer": 6,
+            "provider": 3
+        },
+        {
+            "peerA": 2,
+            "peerB": 3
+        },
+        {
+            "peerA": 5,
+            "peerB": 6
+        }
+    ]
+}

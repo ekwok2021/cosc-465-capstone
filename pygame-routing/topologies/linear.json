@@ -1,0 +1,26 @@
+{
+    "ases" : [
+        {
+            "number": 1,
+            "prefix": "11.0.0.0/8"
+        },
+        {
+            "number": 2,
+            "prefix": "12.0.0.0/8"
+        },
+        {
+            "number": 3,
+            "prefix": "13.0.0.0/8"
+        }
+    ],
+    "relationships" : [
+        {
+            "customer": 1,
+            "provider": 2
+        },
+        {
+            "provider": 2,
+            "customer": 3
+        }
+    ]
+}
