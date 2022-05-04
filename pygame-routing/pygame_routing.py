@@ -45,6 +45,7 @@ tt_font = pygame.font.SysFont("comicsans", 18, True)
 as_font = pygame.font.SysFont("Ariel", 15, False)
 result_font = pygame.font.SysFont("comicsans", 50, True)
 back = pygame.image.load("back.jpg")
+blank = pygame.image.load("blank.jpg")
 
 def button(screen, position, text, size):
     font = pygame.font.SysFont("Arial", size)
@@ -150,13 +151,12 @@ def Drawarrow(pos1_hor, pos1_ver, pos2_hor, pos2_ver):
     pygame.display.flip()
 
 def redrawGameWindow(activated, idled, end, ases, step):
-        win.blit(back,(0,0))
-        print(end)
+        win.blit(blank,(0,0))
         button(win, (WIDTH- 100, HEIGHT / 2 + 120), "TUTORIAL", 20)
-        button(win, (WIDTH- 100, HEIGHT / 2 + 150), "RESTART", 20)
-        button(win, (WIDTH - 100, HEIGHT / 4 - 90), "MENU", 30)
         step_text = font.render("Step: "+ str(step), 1, (0,0,0))
         win.blit(step_text, (WIDTH/2 - 100, 20))
+        button(win, (WIDTH- 100, HEIGHT / 2 + 150), "RESTART", 20)
+        button(win, (WIDTH - 100, HEIGHT / 4 - 90), "MENU", 30)
 
         for a in activated:
             as_text = as_font.render("AS " + str(a) , 1 , (0,0,0))
@@ -233,7 +233,7 @@ def GAME(level):
         return activated, idled
 
     def tutorial_page():
-        win.blit(back,(0,0))
+        win.blit(blank,(0,0))
         clock.tick(5)
         # Explanation for icons
         idle_text = tt_font.render("AS, click it to activate.(think about AS relationships before you click!)", 1 , (0,0,0))
@@ -269,7 +269,7 @@ def GAME(level):
 
     def result_page(outcome, level):
           while True:
-            win.blit(back,(0,0))
+            win.blit(blank,(0,0))
             button_menu = button(win, (WIDTH / 2 - 100 , HEIGHT / 2 + 130), "MENU", 30)
             button_re = button(win, (WIDTH / 2 - 100, HEIGHT / 2 + 70), "TRY AGAIN", 30)
 
@@ -290,7 +290,7 @@ def GAME(level):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if button_re.collidepoint(event.pos):
                         return level
-                    if button_next.collidepoint(event.pos):
+                    if outcome == WIN and button_next.collidepoint(event.pos):
                         return level + 1
                     if button_menu.collidepoint(event.pos):
                         return MENU
