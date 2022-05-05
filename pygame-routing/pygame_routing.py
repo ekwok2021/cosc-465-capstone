@@ -31,6 +31,7 @@ EASY = 1
 MEDIUM = 2
 HARD = 3
 TUTORIAL = False
+QUIT = -1
 
 WIN = 99
 LOSE = 18
@@ -157,6 +158,7 @@ def redrawGameWindow(activated, idled, end, ases, step):
         win.blit(step_text, (WIDTH/2 - 100, 20))
         button(win, (WIDTH- 100, HEIGHT / 2 + 150), "RESTART", 20)
         button(win, (WIDTH - 100, HEIGHT / 4 - 90), "MENU", 30)
+        end = end
 
         for a in activated:
             as_text = as_font.render("AS " + str(a) , 1 , (0,0,0))
@@ -202,11 +204,13 @@ def GAME(level):
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return QUIT
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_play.collidepoint(event.pos):
                     level = EASY
                 if button_quit.collidepoint(event.pos):
                     pygame.quit()
+                    return QUIT
 
         pygame.display.update()
     
@@ -221,7 +225,6 @@ def GAME(level):
         activated = []
         idled = []
         count = 0
-        #print(ases)
         for n in ases.keys():
             LOCATIONS.update({n: LOCATION_LIST[count]})
             if n == start:
@@ -229,7 +232,6 @@ def GAME(level):
             else:
                 idled.append(n)
             count += 1
-        #print(LOCATIONS)
         return activated, idled
 
     def tutorial_page():
@@ -262,6 +264,7 @@ def GAME(level):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    return 0
                 if event.type == pygame.MOUSEBUTTONDOWN:
                         if button_back.collidepoint(event.pos):
                             return False
@@ -287,6 +290,7 @@ def GAME(level):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    return QUIT
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if button_re.collidepoint(event.pos):
                         return level
@@ -322,8 +326,6 @@ def GAME(level):
         ttl_input = pygame.Rect(WIDTH- 100, HEIGHT / 2 + 120, 90, 20)
         rs_input = pygame.Rect(WIDTH- 100, HEIGHT / 2 + 150, 80, 20)
         menu_input = pygame.Rect(WIDTH- 100, HEIGHT / 4 - 90, 80, 30)
-        
-        #print(ases)
 
         # create hitbox for each AS icon
         for key in LOCATIONS:
@@ -336,9 +338,12 @@ def GAME(level):
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return QUIT
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if ttl_input.collidepoint(event.pos):
                     TUTORIAL = tutorial_page()
+                    if TUTORIAL == 0:
+                        return False
                 elif rs_input.collidepoint(event.pos):
                     restart = True
                 elif menu_input.collidepoint(event.pos):
@@ -379,7 +384,6 @@ def GAME(level):
                     return (result_page(WIN, level))
 
 
-        #print(activated)
         if not TUTORIAL:
             redrawGameWindow(activated, idled, end, ases, step)
     
@@ -390,6 +394,9 @@ def main():
     level = 0
     while playing:
         result = GAME(level)
+        if result == QUIT:
+            pygame.quit()
+            break
         level = result
     pygame.quit()
     
