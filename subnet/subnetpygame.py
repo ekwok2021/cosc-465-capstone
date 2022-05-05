@@ -126,8 +126,9 @@ def resultGameWindow(timeout, correct, range1, range2):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
-                return 10
+                return True
         clock.tick(60)
         pygame.display.update()
 
@@ -156,11 +157,13 @@ def GAME():
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_play.collidepoint(event.pos):
                     level = GAME
                 if button_quit.collidepoint(event.pos):
                     pygame.quit()
+                    return False
 
         pygame.display.update()
 
@@ -198,15 +201,18 @@ def GAME():
 
         if counter <= 0:
             timeout = True
-            resultGameWindow(timeout, correct, range1, range2)
+            if not resultGameWindow(timeout, correct, range1, range2):
+                return False
             counter = MAXTIME
             timer_text = str(counter).rjust(3)
-            sub = generateSubnet()
+            LIVES -= 1
+            if LIVES > 0: sub = generateSubnet()
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.USEREVENT:
                 counter -= 1
                 timer_text = str(counter).rjust(3)
@@ -238,10 +244,6 @@ def GAME():
 
                 if event.key == pygame.K_RETURN:
                     range1, range2 = subnets.addressRanges(sub[0])
-                    if timeout:
-                        LIVES -= 1
-                        resultGameWindow(timeout, correct, range1, range2)
-
                     # compare the answer
 
                     correct = subnets.compare(user_text_1, user_text_2, sub[1])
@@ -258,10 +260,11 @@ def GAME():
                         LIVES -= 1
                     
                     # display result window
-                    resultGameWindow(timeout, correct, range1, range2)
+                    if not resultGameWindow(timeout, correct, range1, range2):
+                        return False
                     counter = MAXTIME
                     timer_text = str(counter).rjust(3)
-                    sub = generateSubnet()
+                    if LIVES > 0: sub = generateSubnet()
 
             if active_1:
                 color_1 = color_active
@@ -271,7 +274,7 @@ def GAME():
                 color_2 = color_active
             else: color_2 = color_passive
 
-            if LIVES == 0:
+            if LIVES == 0 or score >= 10:
                 level = END
 
         # win.blit(timer_font.render(timer_text, True, (0,0,0)), (32,48))
@@ -296,11 +299,13 @@ def GAME():
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_re.collidepoint(event.pos):
                     return True
                 if button_quit.collidepoint(event.pos):
                     pygame.quit()
+                    return False
 
         pygame.display.update()
 
