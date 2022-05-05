@@ -1,8 +1,6 @@
 import random
 class latency:
-    places = {("New York", "Los Angeles"): 10367, ("India", "United States"): 3944,
-        ("New York", "London"): 5585, ("Florida", "California"): 3687, ("Qatar, Dubai"): 412}
-
+    
     def compare(user_text_1, answer):
         try:
             if (float(user_text_1) == answer):
