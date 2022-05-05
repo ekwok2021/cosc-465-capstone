@@ -122,7 +122,9 @@ def GAME():
         button_quit = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 100), "QUIT")
         menu_font = pygame.font.SysFont("comicsans", 50, True)
         menu_text = menu_font.render("Latency Game " + "CLICK 'PLAY'", 1, (0,0,0))
-        win.blit(menu_text, (50, HEIGHT / 2 - 100))
+        menu_text2 = menu_font.render("Get 20 Points to Win", 1, (0,0,0))
+        win.blit(menu_text, (50, HEIGHT / 2 - 150))
+        win.blit(menu_text2, (50, HEIGHT / 2 - 100))
         for event in pygame.event.get():
             # close the pygame when close window
             if event.type == pygame.QUIT:
@@ -170,7 +172,9 @@ def GAME():
             counter = MAXTIME
             timer_text = str(counter).rjust(3)
 
-
+        if score >= 4:
+            level = END
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -235,13 +239,15 @@ def GAME():
         clock.tick(60)
         win.blit(back,(0,0))
 
-        if score < 10:
+        if score < 4:
             end_text = menu_font.render("YOU LOSE!", 1, (0,0,0))
+            end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
+            win.blit(end_score, (100, 150))
         else: 
             end_text = menu_font.render("YOU WIN!!!", 1, (0,0,0))
-        end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
+        
         win.blit(end_text, (100, 50))
-        win.blit(end_score, (100, 150))
+        
         button_re = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 50), "RESTART")
         button_quit = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 100), "QUIT")
 
