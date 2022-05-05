@@ -186,6 +186,7 @@ def resultGameWindow(timeout, correct, encode):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
                 return 10
         clock.tick(60)
@@ -209,17 +210,21 @@ def GAME():
         button_quit = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 100), "QUIT")
         menu_font = pygame.font.SysFont("comicsans", 50, True)
         menu_text = menu_font.render("Encode Game " + "CLICK 'PLAY'", 1, (0,0,0))
+        score_text = menu_font.render("Get 10 points to win!!", 1, (0,0,0))
         win.blit(menu_text, (50, HEIGHT / 2 - 100))
+        win.blit(score_text, (125, HEIGHT / 2 - 50))
 
         for event in pygame.event.get():
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_play.collidepoint(event.pos):
                     level = GAME
                 if button_quit.collidepoint(event.pos):
                     pygame.quit()
+                    return False
 
         pygame.display.update()
 
@@ -253,16 +258,21 @@ def GAME():
         correct = False
         if counter <= 0:
             timeout = True
-            resultGameWindow(timeout, correct, encode)
+            LIVES -= 1
+            if not resultGameWindow(timeout, correct, encode):
+                return False
+
             counter = MAXTIME
             timer_text = str(counter).rjust(3)
             encode = genEncode()
             diffi = random.randint(0, 1)
 
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.USEREVENT:
                 counter -= 1
                 timer_text = str(counter).rjust(3)
@@ -281,7 +291,8 @@ def GAME():
                 if event.key == pygame.K_RETURN:
                     if timeout:
                         LIVES -= 1
-                        resultGameWindow(timeout, correct, encode)
+                        if not resultGameWindow(timeout, correct, encode):
+                            return False
 
                     # compare the answer
                     #correct = False
@@ -303,7 +314,8 @@ def GAME():
                         LIVES -= 1
                     
                     # display result window
-                    resultGameWindow(timeout, correct, encode)
+                    if not resultGameWindow(timeout, correct, encode):
+                        return False
                     counter = MAXTIME
                     timer_text = str(counter).rjust(3)
                     encode = genEncode()
@@ -318,7 +330,10 @@ def GAME():
 
         # win.blit(timer_font.render(timer_text, True, (0,0,0)), (32,48))
         # pygame.display.flip()
-        redrawGameWindow(score, LIVES, color_2, input_rect_2, user_text_2, timer_text, encode, diffi)
+        if score >= 10:
+            level = END
+        else:
+            redrawGameWindow(score, LIVES, color_2, input_rect_2, user_text_2, timer_text, encode, diffi)
 
     while level == END:
         clock.tick(60)
@@ -328,9 +343,9 @@ def GAME():
             end_text = menu_font.render("YOU LOSE!", 1, (0,0,0))
         else: 
             end_text = menu_font.render("YOU WIN!!!", 1, (0,0,0))
-        end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
+        #end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
         win.blit(end_text, (100, 50))
-        win.blit(end_score, (100, 150))
+        #win.blit(end_score, (100, 150))
         button_re = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 50), "RESTART")
         button_quit = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 100), "QUIT")
 
@@ -338,11 +353,13 @@ def GAME():
             # close the pygame when close window
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_re.collidepoint(event.pos):
                     return True
                 if button_quit.collidepoint(event.pos):
                     pygame.quit()
+                    return False
 
         pygame.display.update()
 
