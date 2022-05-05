@@ -126,12 +126,12 @@ def GAME():
         for event in pygame.event.get():
             # close the pygame when close window
             if event.type == pygame.QUIT:
-                pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_play.collidepoint(event.pos):
                     level = GAME
                 if button_quit.collidepoint(event.pos):
-                    pygame.quit()
+                    return False
         pygame.display.update()
      # color when input box is clicked
     color_active = pygame.Color("blue")
@@ -164,14 +164,16 @@ def GAME():
         if counter <= 0:
             timeout = True
             LIVES = LIVES - 1
-            resultGameWindow(timeout, correct, answer)
+            if not resultGameWindow(timeout, correct, answer):
+                return False
+            
             counter = MAXTIME
             timer_text = str(counter).rjust(3)
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                return False
             if event.type == pygame.USEREVENT:
                 counter -= 1
                 timer_text = str(counter).rjust(3)
@@ -191,7 +193,8 @@ def GAME():
                 if event.key == pygame.K_RETURN:
                     if timeout:
                         LIVES -= 1
-                        resultGameWindow(timeout, correct, answer)
+                        if not resultGameWindow(timeout, correct, answer):
+                            return False
 
                     # compare the answer
 
@@ -211,7 +214,8 @@ def GAME():
                         LIVES -= 1
                     
                     # display result window
-                    resultGameWindow(timeout, correct, answer)
+                    if not resultGameWindow(timeout, correct, answer):
+                        return False
                     counter = MAXTIME
                     timer_text = str(counter).rjust(3)
                     B = latency.genB()
@@ -244,12 +248,12 @@ def GAME():
         for event in pygame.event.get():
             # close the pygame when close window
             if event.type == pygame.QUIT:
-                pygame.quit()
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_re.collidepoint(event.pos):
                     return True
                 if button_quit.collidepoint(event.pos):
-                    pygame.quit()
+                    return False
 
         pygame.display.update()
 
