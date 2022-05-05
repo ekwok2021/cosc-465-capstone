@@ -39,7 +39,7 @@ def button(screen, position, text):
     pygame.draw.rect(screen, (100, 100, 100), (x, y, w , h))
     return screen.blit(text_render, (x, y))
 
-def redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, timer_text, B, distance, bandwidth):
+def redrawGameWindow(score, LIVES, color_1, input_rect_1, user_text_1, timer_text, B, distance, bandwidth):
     win.blit(back,(0,0))
     tip_font = pygame.font.SysFont("Ariel", 18, False)
     # update question
@@ -135,14 +135,10 @@ def GAME():
     # color when input box is idle
     color_passive = pygame.Color('paleturquoise1')
     user_text_1 = ""
-    user_text_2 = ""
     #user input area
     input_rect_1 = pygame.Rect(INPUT_HOR,INPUT_VER,140,32)
-    input_rect_2 = pygame.Rect(INPUT_HOR - 30,INPUT_VER + 50 ,140,32)
     color_1 = color_passive
-    color_2 = color_passive
     active_1 = False
-    active_2 = False
     score = 0
     LIVES = 3
     counter = MAXTIME
@@ -180,15 +176,8 @@ def GAME():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if input_rect_1.collidepoint(event.pos):
                     active_1 = True
-                    active_2 = False
                 else:
                     active_1 = False
-
-                if input_rect_2.collidepoint(event.pos):
-                    active_2 = True
-                    active_1 = False
-                else:
-                    active_2 = False
 
             if event.type == pygame.KEYDOWN:
                 if active_1:
@@ -230,14 +219,10 @@ def GAME():
                 color_1 = color_active
             else: color_1 = color_passive
 
-            if active_2:
-                color_2 = color_active
-            else: color_2 = color_passive
-
             if LIVES == 0:
                 level = END
 
-        redrawGameWindow(score, LIVES, color_1, color_2, input_rect_1, input_rect_2, user_text_1, timer_text, B, distance, bandwidth)
+        redrawGameWindow(score, LIVES, color_1, input_rect_1, user_text_1, timer_text, B, distance, bandwidth)
 
     while level == END:
         clock.tick(60)
