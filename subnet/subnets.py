@@ -3,7 +3,7 @@ class subnets:
 
     def genSubnet(): #returns array 
         subnet = random.sample(range(0,255), 4)
-        subnet.append(random.randint(1,32))
+        subnet.append(random.choice([1,7,8,9,15,16,17,23,24,25,30,31]))
         print(subnet)
         return subnet
 
