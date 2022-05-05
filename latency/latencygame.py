@@ -172,7 +172,7 @@ def GAME():
             counter = MAXTIME
             timer_text = str(counter).rjust(3)
 
-        if score >= 4:
+        if score >= 20:
             level = END
         
         for event in pygame.event.get():
@@ -239,7 +239,7 @@ def GAME():
         clock.tick(60)
         win.blit(back,(0,0))
 
-        if score < 4:
+        if score < 20:
             end_text = menu_font.render("YOU LOSE!", 1, (0,0,0))
             end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
             win.blit(end_score, (100, 150))
