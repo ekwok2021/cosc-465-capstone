@@ -1,12 +1,29 @@
 import random
 class latency:
+    places = {("New York", "Los Angeles"): 10367, ("India", "United States"): 3944,
+        ("New York", "London"): 5585, ("Florida", "California"): 3687, ("Qatar, Dubai"): 412}
 
+    def compare(user_text_1, answer):
+        try:
+            if (float(user_text_1) == answer):
+                return True
+            else:
+                return False
+        except ValueError:
+            print("not float")
+            return False
+        
     def genB():
         rand = random.randint(1,10)
         rand = rand*1000
         B = rand
         print("B = " + str(B))
+        #print(latency.places)
         return B
+
+    def genPlaceDistance():
+
+        return 
     
     def distance():
         rand = random.randint(1,20)
