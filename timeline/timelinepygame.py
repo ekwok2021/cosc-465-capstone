@@ -16,7 +16,7 @@ INPUT_VER = 250
 MENU = 0
 GAME = 1
 END = 2
-MAXTIME = 10
+MAXTIME = 100
 
 base_font = pygame.font.Font(None, 32)
 font = pygame.font.SysFont("comicsans", 30, True)
