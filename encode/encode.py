@@ -295,13 +295,12 @@ def GAME():
                             return False
 
                     # compare the answer
-                    #correct = False
+                    
                     if user_text_2 == '':
                         correct = False
                     elif int(user_text_2) == int(encode):
                         correct = True
-                    print(user_text_2)
-                    print(encode)
+                    
 
                     # change scores and clear answer
                     user_text_2 = ""
@@ -328,8 +327,6 @@ def GAME():
             if LIVES == 0:
                 level = END
 
-        # win.blit(timer_font.render(timer_text, True, (0,0,0)), (32,48))
-        # pygame.display.flip()
         if score >= 10:
             level = END
         else:
@@ -343,9 +340,7 @@ def GAME():
             end_text = menu_font.render("YOU LOSE!", 1, (0,0,0))
         else: 
             end_text = menu_font.render("YOU WIN!!!", 1, (0,0,0))
-        #end_score = menu_font.render("YOUR SCORE IS " + str(score), 1, (255,0,0))
         win.blit(end_text, (100, 50))
-        #win.blit(end_score, (100, 150))
         button_re = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 50), "RESTART")
         button_quit = button(win, (WIDTH / 2 - 50, HEIGHT / 2 + 100), "QUIT")
 
