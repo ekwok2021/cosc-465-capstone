@@ -44,11 +44,14 @@ def redrawGameWindow(score, LIVES, color_1, input_rect_1, user_text_1, timer_tex
     tip_font = pygame.font.SysFont("Ariel", 18, False)
     # update question
     q_text = "What is the latency to send a " + str(B) + "B packet over a " + str(distance) + "km distance" 
-    q_text2 = "with a bandwidth of " + str(bandwidth) + "Gbps?"
+    q_text2 = "with a bandwidth of " + str(bandwidth) + "Gbps and speed of light = 2*10^8?"
+    q_text3 = "Round to the fourth decimal place and answer in ms."
     question = font.render(q_text, 1 ,(0,0,0))
     question2 = font.render(q_text2, 1 ,(0,0,0))
+    question3 = font.render(q_text3, 1 ,(0,0,0))
     win.blit(question, (WIDTH/2 - 350, HEIGHT / 2 -50))
     win.blit(question2, (WIDTH/2 - 350, HEIGHT / 2 - 25))
+    win.blit(question3, (WIDTH/2 - 350, HEIGHT / 2))
 
     tip_text = tip_font.render("Press 'Enter' to submit", 1, (0,0,0))
     win.blit(tip_text, (WIDTH / 2 - 50, HEIGHT - 30))
