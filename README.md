@@ -3,7 +3,7 @@
 ## Description
 There are five folders each containing a game file and associated files. The games are similar in style but different in purpose. Each game is based on pygame (for installing pygame, check out https://www.pygame.org/wiki/GettingStarted) but 
 requires a different algorithm to generate questions. Each game generates questions with random metrics for players to answer. Please see description of each game in 
-`readme` in each folder.
+a `readme` file in each folder.
 
 ## Review
 This project was inspired by the various activities we did throughout the Computer Networks course and aimed to serve as useful educational material for future students 
