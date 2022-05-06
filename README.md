@@ -11,5 +11,6 @@ taking this course. We have reached the goal we set in our proposal. Although th
 we met. After working together on the first game, each of us made another game based on the first one. By splitting the work almost equally, we were efficient. 
 And by meeting and discussing, we shared strategies and fixed common bugs.  
   
-However, there is always room for future improvement. There can be a better-looking user interface, a better organization of codes, and more complex game mechanics. 
-Knowing this, We are still satisfied with the current product, as we are confident that it will be useful.
+However, there is always room for future improvement. There can be a better-looking user interface, a better organization of codes, a uniform documentation and coding style, and perhaps more complex game mechanics. 
+Knowing this, We are still satisfied with the current product, as we are confident that it will be useful. And the ideas in these five games can surely be used in 
+developing other educational games.
